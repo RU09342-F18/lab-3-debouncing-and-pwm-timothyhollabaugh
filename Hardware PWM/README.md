@@ -1,18 +1,21 @@
 # Hardware PWM
-Now that you have done the software version of PWM, now it is time to start leveraging the other features of these Timer Modules.
 
-## Task
-You need to replicate the same behavior as in the software PWM, only using the Timer Modules ability to directly output to a GPIO Pin instead of managing them in software. One way to thing about what should happen is that unless your are doing some other things in your code, your system should initialize, set the Timer Modules, and then turn off the CPU.
+Increases the brightness of a led on the launchpad when a button is pressed. The other led lights up while the button is being pressed.
+This uses timers to directly control the pins to generate PWM.
 
-## Deliverables
-You will need to have two folders in this repository, one for each of the processors that you used for this part of the lab. Remember to replace this README with your own.
+The MSP430G2553 and MSP430F5529 are officially supported, and the source code is in the g2553 and f5529 folders, respectivly.
 
-### Hints
-Read up on the P1SEL registers as well as look at the Timer modules ability to multiplex.
+# Usage
 
-## Extra Work
-### Using ACLK
-Some of these microprocessors have a built in ACLK which is extremely slow compared to your up to 25MHz available on some of them. What is the overall impact on the system when using this clock? Can you actually use your PWM code with a clock that slow?
+By default, this uses P1.0 for th button led, P1.6 for the brightness led, and P1.3 for the button on the g2553.
+The f5529 uses P4.7 for the button led, P1.2 for the brightness led, and P1.1 for the button.
+Note that the f5529 launchpa does not have a led on p1.2; a jumper can be run to the P1.0 led.
 
-### Ultra Low Power
-Using a combination of ACLK, Low Power Modes, and any other means you may deem necessary, optimize this PWM code to run at 50% duty cycle with a LED on the MSP430FR5994. In particular, time how long your code can run on the fully charged super capacitor. You do not need to worry about the button control in this case, and you will probably want to disable all the GPIO that you are not using (nudge, nudge, hint, hint).
+# Compiling and uploading
+
+Ensure that you have msp430gcc installed. In particular, `msp430-elf-gcc` and `msp430-elf-objcopy` are used to compile the program and convert the elf to a hex for uploading.
+
+To flash the msp430, you will need the official TI MSP Flasher installed. It will need to be avaiable as `mspflash`. This allows a wrapper script to set the `LD_LIBRARY_PATH` correctly for MSP Flasher.
+
+Simply type `make` in the correct directory for your processor, and the program will be compiled and uploaded to an attached Launchpad.
+
